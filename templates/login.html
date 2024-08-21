@@ -1,15 +1,81 @@
-{% for error in errors %}
-    <p style="color: red">{{ error }}</p>
-{% endfor %}
-
-<form action="/auth/login" method="post">
-  <p>
-      <p><label for="">Username</label></p>
-      <input type="text" name="username" value="{{ username }}" required>
-  </p>
-  <p>
-      <p><label for="">Password</label></p>
-      <input type="password" name="password" value="{{ password }}" required>
-  </p>
-  <input type="submit" value="Submit">
-</form>
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Login Page</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    
+    .login-container {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 300px;
+    }
+    
+    h1 {
+        text-align: center;
+        color: #1877f2;
+        margin-bottom: 1.5rem;
+    }
+    
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    input {
+        margin-bottom: 1rem;
+        padding: 0.5rem;
+        border: 1px solid #dddfe2;
+        border-radius: 6px;
+    }
+    
+    button {
+        background-color: #1877f2;
+        color: white;
+        border: none;
+        padding: 0.7rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    button:hover {
+        background-color: #166fe5;
+    }
+    
+    .forgot-password {
+        text-align: center;
+        margin-top: 1rem;
+    }
+    
+    .forgot-password a {
+        color: #1877f2;
+        text-decoration: none;
+    }
+    
+    .forgot-password a:hover {
+        text-decoration: underline;
+    }
+    </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h1>Presales Demo Site</h1>
+            <form id="loginForm" action="/auth/login" method="post">
+                <input type="text" id="username" name="username" placeholder="Username" value="{{ username }}" required>
+                <input type="password" id="password" name="password" placeholder="Password" value="{{ password }}" required>
+                <button type="submit" value="Submit">Log In</button>
+            </form>
+        </div>
+    </body>
+    </html>
