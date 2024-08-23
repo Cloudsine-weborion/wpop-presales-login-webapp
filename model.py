@@ -1,6 +1,12 @@
 from typing import List
 from pydantic import BaseModel
 from passlib.handlers.sha2_crypt import sha512_crypt as crypto
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+USERNAME1 = os.getenv("USERNAME1")
+PASSWORD1 = os.getenv("PASSWORD1")
 
 
 class User(BaseModel):
@@ -14,10 +20,8 @@ class DataBase(BaseModel):
 
 DB = DataBase(
     user=[
-        # highlight-start
-        User(username="admin", hashed_password=crypto.hash("12345")),
-        User(username="tester", hashed_password=crypto.hash("12345")),
-        # highlight-end
+        User(username=USERNAME1, hashed_password=crypto.hash(PASSWORD1)),
+        # add more users here
     ]
 )
 
