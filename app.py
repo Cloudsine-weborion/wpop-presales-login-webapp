@@ -11,7 +11,12 @@ from dotenv import load_dotenv
 
 from settings import settings
 from model import User
-from auth import authenticate_user, create_access_token, get_current_user_from_token
+from auth import (
+    authenticate_user,
+    create_access_token,
+    get_current_user_from_token,
+    get_current_user_from_cookie,
+)
 
 
 class LoginForm:
@@ -47,17 +52,30 @@ PORT = int(os.getenv("PORT"))
 templates = Jinja2Templates(directory="templates")
 
 
+# Health check endpoint
 @app.get("/healthz", status_code=200)
 async def root():
     return {"healthy!"}
 
 
-@app.get("/", status_code=200)
-async def index(user: User = Depends(get_current_user_from_token)):
-    return {"index page"}
+# --------------------------------------------------------------------------
+# Home Page
+# --------------------------------------------------------------------------
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {
+        "user": user,
+        "request": request,
+    }
+    print(f"{context}")
+    return templates.TemplateResponse("index.html", context)
 
 
-@app.post("/token")
+@app.post("token")
 async def login_for_access_token(
     response: Response, form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Dict[str, str]:
@@ -77,6 +95,9 @@ async def login_for_access_token(
     return {settings.COOKIE_NAME: access_token, "token_type": "bearer"}
 
 
+# --------------------------------------------------------------------------
+# Demo page
+# --------------------------------------------------------------------------
 @app.get("/demo", response_class=RedirectResponse, status_code=302)
 async def demo(request: Request, user: User = Depends(get_current_user_from_token)):
     context = {"user": user, "request": request}
@@ -94,6 +115,9 @@ async def login_get(request: Request):
     return templates.TemplateResponse("login.html", context)
 
 
+# --------------------------------------------------------------------------
+# Login - POST
+# --------------------------------------------------------------------------
 @app.post("/auth/login", response_class=HTMLResponse)
 async def login_post(request: Request):
     form = LoginForm(request)
