@@ -5,6 +5,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import RedirectResponse
+import uvicorn
+import os
+from dotenv import load_dotenv
 
 from settings import settings
 from model import User
@@ -35,23 +38,30 @@ class LoginForm:
 
 app = FastAPI()
 
+load_dotenv()
+HOST = os.getenv("HOST")
+PORT = int(os.getenv("PORT"))
+
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/", status_code=200)
+@app.get("/healthz", status_code=200)
 async def root():
     return {"healthy!"}
 
 
+@app.get("/", status_code=200)
+async def index(user: User = Depends(get_current_user_from_token)):
+    return {"index page"}
+
+
 @app.post("/token")
-def login_for_access_token(
+async def login_for_access_token(
     response: Response, form_data: OAuth2PasswordRequestForm = Depends()
 ) -> Dict[str, str]:
-    # highlight-start
     user = authenticate_user(form_data.username, form_data.password)
-    # highlight-end
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -61,18 +71,14 @@ def login_for_access_token(
 
     # Set an HttpOnly cookie in the response. `httponly=True` prevents
     # JavaScript from reading the cookie.
-    # highlight-start
     response.set_cookie(
         key=settings.COOKIE_NAME, value=f"Bearer {access_token}", httponly=True
     )
-    # highlight-end
     return {settings.COOKIE_NAME: access_token, "token_type": "bearer"}
 
 
 @app.get("/demo", response_class=RedirectResponse, status_code=302)
-# highlight-start
-def index(request: Request, user: User = Depends(get_current_user_from_token)):
-    # highlight-end
+async def demo(request: Request, user: User = Depends(get_current_user_from_token)):
     context = {"user": user, "request": request}
     return RedirectResponse("https://typer.tiangolo.com")
 
@@ -81,7 +87,7 @@ def index(request: Request, user: User = Depends(get_current_user_from_token)):
 # Login - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/login", response_class=HTMLResponse)
-def login_get(request: Request):
+async def login_get(request: Request):
     context = {
         "request": request,
     }
@@ -94,8 +100,8 @@ async def login_post(request: Request):
     await form.load_data()
     if await form.is_valid():
         try:
-            response = RedirectResponse("/demo", status.HTTP_302_FOUND)
-            login_for_access_token(response=response, form_data=form)
+            response = RedirectResponse("/", status.HTTP_302_FOUND)
+            await login_for_access_token(response=response, form_data=form)
             form.__dict__.update(msg="Login Successful!")
             return response
         except HTTPException:
@@ -103,3 +109,17 @@ async def login_post(request: Request):
             form.__dict__.get("errors").append("Incorrect Email or Password")
             return templates.TemplateResponse("login.html", form.__dict__)
     return templates.TemplateResponse("login.html", form.__dict__)
+
+
+def start_server():
+    uvicorn.run(
+        "app:app",
+        port=PORT,
+        host=HOST,
+        log_level="debug",
+        reload=True,
+    )
+
+
+if __name__ == "__main__":
+    start_server()
