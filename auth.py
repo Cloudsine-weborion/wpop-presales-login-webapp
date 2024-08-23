@@ -86,6 +86,7 @@ def decode_token(token: str) -> User:
     # pdb.set_trace()
     # highlight-start
     # token = token.removeprefix("Bearer").strip()
+    token = token.replace("Bearer", "").strip()
     # highlight-end
     try:
         payload = jwt.decode(
