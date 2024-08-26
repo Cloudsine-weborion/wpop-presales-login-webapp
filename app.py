@@ -8,6 +8,11 @@ from fastapi.responses import RedirectResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
+from contextlib import asynccontextmanager
+from fastapi.responses import StreamingResponse
+from starlette.background import BackgroundTask
+
+import httpx
 
 from settings import settings
 from model import User
@@ -41,7 +46,40 @@ class LoginForm:
         return False
 
 
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     # Initialise the Client on startup and add it to the state
+#     # http://127.0.0.1:8001/ is the base_url of the other server that requests should be forwarded to
+#     async with httpx.AsyncClient(base_url="http://0.0.0.0:8089/") as client:
+#         yield {"client": client}
+# The Client closes on shutdown
+
+
 app = FastAPI()
+# app = FastAPI(lifespan=lifespan)
+
+
+# async def _reverse_proxy(request: Request):
+#     client = request.state.client
+#     url = httpx.URL(path=request.url.path, query=request.url.query.encode("utf-8"))
+#     import pdb
+
+#     pdb.set_trace()
+#     headers = [(k, v) for k, v in request.headers.raw if k != b"host"]
+#     req = client.build_request(
+#         request.method, url, headers=headers, content=request.stream()
+#     )
+#     r = await client.send(req, stream=True)
+#     return StreamingResponse(
+#         r.aiter_raw(),
+#         status_code=r.status_code,
+#         headers=r.headers,
+#         background=BackgroundTask(r.aclose),
+#     )
+
+
+# app.add_route("/juiceshop", _reverse_proxy, ["POST"])
+
 
 load_dotenv()
 HOST = os.getenv("HOST")
@@ -102,6 +140,15 @@ async def login_for_access_token(
 async def demo(request: Request, user: User = Depends(get_current_user_from_token)):
     context = {"user": user, "request": request}
     return RedirectResponse("https://typer.tiangolo.com")
+
+
+@app.get("/{path:path}")
+async def tile_request(path: str, response: Response):
+    async with httpx.AsyncClient() as client:
+        proxy = await client.get(f"http://{HOST}:{PORT}/{path}")
+    response.body = proxy.content
+    response.status_code = proxy.status_code
+    return response
 
 
 # --------------------------------------------------------------------------
