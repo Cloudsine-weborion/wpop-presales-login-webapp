@@ -4,5 +4,7 @@ COPY . .
 
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
+EXPOSE 8089
+
 CMD ["python", "app.py"]
 
