@@ -110,13 +110,54 @@ async def demo(request: Request, user: User = Depends(get_current_user_from_toke
     return RedirectResponse("https://typer.tiangolo.com")
 
 
-@app.get("/juiceshop")
-async def tile_request(path: str, response: Response):
-    async with httpx.AsyncClient() as client:
-        proxy = await client.get(f"http://54.255.164.107/healthz")
-    response.body = proxy.content
-    response.status_code = proxy.status_code
-    return response
+# @app.get("/juiceshop")
+# async def tile_request(response: Response):
+#     async with httpx.AsyncClient() as client:
+#         proxy = await client.get(f"https://google.com")
+#     response.body = proxy.content
+#     response.status_code = proxy.status_code
+#     return response
+
+
+# @app.get("/juiceshop")
+# async def proxy_to_google(request: Request):
+#     url = "https://www.google.com"
+#     async with httpx.AsyncClient(follow_redirects=True) as client:
+#         response = await client.get(url, stream=True)
+
+#     # Forward headers if needed
+#     headers = {
+#         key: value
+#         for key, value in response.headers.items()
+#         if key.lower() not in ["content-encoding", "transfer-encoding", "connection"]
+#     }
+
+#     return StreamingResponse(
+#         response.aiter_raw(),  # Streaming response body
+#         status_code=response.status_code,
+#         headers=headers,
+#         media_type=response.headers.get("content-type", "text/html"),
+#     )
+
+
+client = httpx.AsyncClient(base_url="http://172.125.11.161/")
+
+
+async def _reverse_proxy(request: Request):
+    url = httpx.URL(path=request.url.path, query=request.url.query.encode("utf-8"))
+    rp_req = client.build_request(
+        request.method, url, headers=request.headers.raw, content=await request.body()
+    )
+    rp_resp = await client.send(rp_req, stream=True)
+    return StreamingResponse(
+        rp_resp.aiter_raw(),
+        status_code=rp_resp.status_code,
+        headers=rp_resp.headers,
+        background=BackgroundTask(rp_resp.aclose),
+    )
+
+
+app.add_route("/demo/{path:path}", _reverse_proxy, ["GET", "POST"])
 
 
 # --------------------------------------------------------------------------
