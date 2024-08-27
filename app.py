@@ -48,7 +48,7 @@ load_dotenv()
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/auth/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
@@ -77,7 +77,7 @@ async def index(request: Request):
 
 
 @app.get("/nginx-auth")
-async def index(request: Request):
+async def nginx_auth(request: Request):
     try:
         user = get_current_user_from_cookie(request)
     except:
