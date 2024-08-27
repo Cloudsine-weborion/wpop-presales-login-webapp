@@ -76,6 +76,23 @@ async def index(request: Request):
     return templates.TemplateResponse("index.html", context)
 
 
+# --------------------------------------------------------------------------
+# SQLI Page
+# --------------------------------------------------------------------------
+@app.get("/auth/sqli", response_class=HTMLResponse)
+async def index(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {
+        "user": user,
+        "request": request,
+    }
+    # print(f"{context}")
+    return templates.TemplateResponse("sqli.html", context)
+
+
 @app.get("/nginx-auth")
 async def nginx_auth(request: Request):
     try:
