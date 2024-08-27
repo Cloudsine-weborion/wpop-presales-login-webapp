@@ -6,11 +6,7 @@
 
 }
 
-/* table {
-    background-color: rgb(204, 29, 29);
-} */
 
 .navbar-custom{
     background-color: var(--bs-indigo);
-    color: white;
 }
