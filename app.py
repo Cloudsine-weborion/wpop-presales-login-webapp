@@ -8,11 +8,6 @@ from fastapi.responses import RedirectResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
-from contextlib import asynccontextmanager
-from fastapi.responses import StreamingResponse
-from starlette.background import BackgroundTask
-
-import httpx
 
 from settings import settings
 from model import User
@@ -114,15 +109,6 @@ async def login_for_access_token(
         key=settings.COOKIE_NAME, value=f"Bearer {access_token}", httponly=True
     )
     return {settings.COOKIE_NAME: access_token, "token_type": "bearer"}
-
-
-# --------------------------------------------------------------------------
-# Demo page
-# --------------------------------------------------------------------------
-@app.get("/demo", response_class=RedirectResponse, status_code=302)
-async def demo(request: Request, user: User = Depends(get_current_user_from_token)):
-    context = {"user": user, "request": request}
-    return RedirectResponse("https://typer.tiangolo.com")
 
 
 # --------------------------------------------------------------------------
