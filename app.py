@@ -53,7 +53,7 @@ load_dotenv()
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
@@ -77,7 +77,7 @@ async def index(request: Request):
         "user": user,
         "request": request,
     }
-    print(f"{context}")
+    # print(f"{context}")
     return templates.TemplateResponse("index.html", context)
 
 
