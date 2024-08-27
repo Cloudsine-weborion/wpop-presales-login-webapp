@@ -19,7 +19,7 @@
   </head>
   <body>
     {% if user %}
-    <nav class="navbar navbar-expand-lg navbar-custom">
+    <nav class="navbar navbar-dark navbar-expand-lg navbar-custom">
       <div class="container-fluid">
         <a class="navbar-brand mb-0 h1" href="/auth/cpanel">WebOrion</a>
         <button
@@ -58,6 +58,7 @@
               <th scope="col">Type</th>
               <th scope="col">Mitigation</th>
               <th scope="col">Info</th>
+              <th scope="col">Payload</th>
             </tr>
           </thead>
           <tbody>
@@ -65,25 +66,29 @@
               <th scope="row">1</th>
               <td>SQL Injection</td>
               <td>CRS Rules 942XXX</td>
-              <td><a href="/templates/sqli.html">Read More</a></td>
+              <td><a href="/auth/sqli">Read More</a></td>
+              <td>/rest/product?=UNIONSELECT</td>
             </tr>
             <tr>
               <th scope="row">2</th>
               <td>CSRF</td>
-              <td>Thornton</td>
-              <td>@fat</td>
+              <td>Custom Rule</td>
+              <td><a href="/templates/sqli.html">Read More</a></td>
+              <td>/rest/product?=UNIONSELECT</td>
             </tr>
             <tr>
               <th scope="row">3</th>
               <td>XSS</td>
-              <td>Thornton</td>
-              <td>@fat</td>
+              <td>CRS Rules 941XXX</td>
+              <td><a href="/templates/sqli.html">Read More</a></td>
+              <td>/rest/product?=UNIONSELECT</td>
             </tr>
             <tr>
-              <th scope="row">3</th>
+              <th scope="row">4</th>
               <td>Web Shell</td>
-              <td>Thornton</td>
-              <td>@fat</td>
+              <td>CRS Rules 932XXX</td>
+              <td><a href="/templates/sqli.html">Read More</a></td>
+              <td>/rest/product?=UNIONSELECT</td>
             </tr>
           </tbody>
         </table>

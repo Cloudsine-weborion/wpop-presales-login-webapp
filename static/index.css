@@ -9,4 +9,5 @@
 
 .navbar-custom{
     background-color: var(--bs-indigo);
+    color:white;
 }
