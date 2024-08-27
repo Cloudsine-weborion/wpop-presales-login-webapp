@@ -5,3 +5,12 @@
     padding:10px;
 
 }
+
+/* table {
+    background-color: rgb(204, 29, 29);
+} */
+
+.nav_item{
+    align-items: right;
+    padding-left: 500px;
+}

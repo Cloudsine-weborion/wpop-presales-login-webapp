@@ -14,28 +14,88 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/index.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body>
-    <div class="index_container">
-      <h1>Demo Index page</h1>
-        <div class="d-flex flex-row mb-3">
-          {% if user %}
-          <div class="p-2">
-            <a href="/">Juice Shop</a>
-          </div>
-          <div class="p-2">
-            <a href="/webshell">Web Shell</a>
-          </div>
-          <div class="p-2">
-            <a href="https://google.com">Bank App</a>
-          </div>
+    {% if user %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand mb-0 h1" href="/auth/cpanel">WebOrion</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav_item">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Juice Shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/webshell">Web Shell</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://google.com">Bank App</a>
+            </li>
+          </ul>
         </div>
-        {% else %}
-        <p>
-            You are currently not authenticated, please login here
-            <a href="/auth/login" class="btn">Login</a>
-        </p>
-      {% endif %}
       </div>
+    </nav>
+
+    <div class="index_container">
+      <div>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Type</th>
+              <th scope="col">Mitigation</th>
+              <th scope="col">Info</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>SQL Injection</td>
+              <td>CRS Rules 942XXX</td>
+              <td><a href="/templates/sqli.html">Read More</a></td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>CSRF</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>XSS</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Web Shell</td>
+              <td>Thornton</td>
+              <td>@fat</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {% else %}
+      <p>
+          You are currently not authenticated, please login here
+          <a href="/auth/login" class="btn">Login</a>
+      </p>
+    {% endif %}
+
+  </div>
   </body>
 </html>
