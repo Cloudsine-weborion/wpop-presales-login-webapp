@@ -10,7 +10,7 @@
     background-color: rgb(204, 29, 29);
 } */
 
-.nav_item{
-    align-items: right;
-    padding-left: 500px;
+.navbar-custom{
+    background-color: var(--bs-indigo);
+    color: white;
 }
