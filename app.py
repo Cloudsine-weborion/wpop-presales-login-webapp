@@ -67,7 +67,7 @@ async def root():
 # --------------------------------------------------------------------------
 # Home Page
 # --------------------------------------------------------------------------
-@app.get("/", response_class=HTMLResponse)
+@app.get("/auth/cpanel", response_class=HTMLResponse)
 async def index(request: Request):
     try:
         user = get_current_user_from_cookie(request)
@@ -145,7 +145,7 @@ async def login_post(request: Request):
     await form.load_data()
     if await form.is_valid():
         try:
-            response = RedirectResponse("/", status.HTTP_302_FOUND)
+            response = RedirectResponse("/auth/cpanel", status.HTTP_302_FOUND)
             await login_for_access_token(response=response, form_data=form)
             form.__dict__.update(msg="Login Successful!")
             return response
