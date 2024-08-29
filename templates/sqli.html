@@ -1,5 +1,111 @@
 <!doctype html>
 
-<div>
-    sqli page
-</div>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WAF SalesDemo</title>
+  <link rel="icon"
+    href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn4.vectorstock.com%2Fi%2F1000x1000%2F16%2F48%2Fshield-icon-placed-on-transparent-background-vector-23041648.jpg&f=1&nofb=1&ipt=4987d90eeb0ba8ac2936f1b6e833e81fafd2c0c7fee2976395c854ba8b2da5a1&ipo=images"
+    type="image/x-icon" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/auth/static/sqli.css">
+
+  <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+    integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+    </script> -->
+
+</head>
+
+<body>
+
+  <!--Navbar-->
+  <nav class="navbar navbar-light navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand mb-0 h1" href="/auth/cpanel">WebOrion</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Juice Shop</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/webshell">Web Shell</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://google.com">Bank App</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SQLI Documentation Section-->
+  <div class="container mt-5">
+    <h1>SQL Injection</h1>
+    <h2>Overview</h2>
+    <p>SQL injection is a web application vulnerability as part of the OWASP Top Ten 2021. It is being exploited
+      through
+      SQL commands to search and extract sensitive information </p>
+    <h3>Juice Shop Scenario</h3>
+    <p>Exploiting this vulnerability on juice-shop to retrieve the user’s login email and password: </p>
+
+    <p>1. Discovered that there is a /search endpoint that allows users to retrieve product information</p>
+    <p>2. This discovery proves that there is an endpoint that allows access to the database. Inspect the network
+      traffic and you can find out that the endpoint is /rest/products/search </p>
+    <p>3. Since this endpoint fetches the product information from the PRODUCTS table. We can craft a UNION select
+      payload to query from the USERS table</p>
+    <p>
+      4. UNION select works in a way where both table columns need to match. Therefore, we need to first discover how
+      many columns are there in the PRODUCTS table
+    </p>
+
+    <pre>
+      <code>
+        /rest/products/search?q=test%27%29%29%20UNION%20SELECT%201%20FROM%20USERS-- 
+    </code>
+    </pre>
+
+    <p>
+      5. Do this repeatedly until we find out that the number of columns for the PRODUCTS table is 9
+    </p>
+
+    <p>
+      6. Therefore, now we can craft the sql injection payload targeting the USERS table email and password using UNION
+      select
+    </p>
+
+    <pre>
+      <code>
+    /rest/products/search?q=qwert%27%29%29%20UNION%20SELECT%20id%2C%20email%2C%20password%2C%20%274%27%2C%20%275%27%2C%20%276%27%2C%20%277%27%2C%20%278%27%2C%20%279%27%20FROM%20Users--
+    </code>
+    </pre>
+    <h2>Mitigaiton</h2>
+    <p>CRS blocks SQL injection exploits with rules starting from <a
+        href="https://github.com/coreruleset/coreruleset/blob/main/rules/REQUEST-942-APPLICATION-ATTACK-SQLI.conf">942XXX</a>
+    </p>
+  </div>
+
+  <!--Footer-->
+  <section class="footer">
+    <div class="container-fluid">
+      <footer class="py-3 my-4 mb-0">
+        <p class="text-center ">&copy; 2024 WebOrion</p>
+      </footer>
+    </div>
+  </section>
+
+</body>

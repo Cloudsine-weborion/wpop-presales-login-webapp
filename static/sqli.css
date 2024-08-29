@@ -1,0 +1,33 @@
+.navbar{
+    background-color: var(--bs-indigo);
+}
+
+
+.nav-link{
+    color: white;
+}
+
+
+h1{
+    font-size:1.75em;
+}
+
+h2{
+    font-size: 1.5em;
+}
+
+h3{
+    font-size: 1.2em;
+}
+
+p{
+    font-size:1em;
+}
+
+.footer .container-fluid{
+    background-color: var(--bs-indigo);
+}
+
+.footer p{
+    color: white;
+}
