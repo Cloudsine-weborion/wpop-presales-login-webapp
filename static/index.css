@@ -6,8 +6,11 @@
 
 }
 
-
-.navbar-custom{
+.navbar{
     background-color: var(--bs-indigo);
-    color:white;
 }
+
+.nav-link{
+    color: white;
+}
+
