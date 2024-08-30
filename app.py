@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 import asyncio
 
 from settings import settings
-from model import User
 from auth import (
     authenticate_user,
     create_access_token,
@@ -49,6 +48,9 @@ load_dotenv()
 HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 
+
+account_balance = {"balance": "$1000"}
+
 app.mount("/auth/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
@@ -81,7 +83,7 @@ async def index(request: Request):
 # SQLI Page
 # --------------------------------------------------------------------------
 @app.get("/auth/sqli", response_class=HTMLResponse)
-async def index(request: Request):
+async def auth_sqli(request: Request):
     try:
         user = get_current_user_from_cookie(request)
     except:
@@ -90,8 +92,40 @@ async def index(request: Request):
         "user": user,
         "request": request,
     }
-    # print(f"{context}")
     return templates.TemplateResponse("sqli.html", context)
+
+
+# --------------------------------------------------------------------------
+# Bank Page
+# --------------------------------------------------------------------------
+@app.get("/auth/bank", response_class=HTMLResponse)
+async def auth_bank(request: Request):
+    recent_transactions = [
+        {"description": "Restaurant XYZ", "date": "May 15, 2023", "amount": "-$45.60"},
+        {"description": "Grocery Store", "date": "May 14, 2023", "amount": "-$82.35"},
+        {
+            "description": "Salary Deposit",
+            "date": "May 1, 2023",
+            "amount": "+$3,500.00",
+        },
+        {
+            "description": "Macdonald",
+            "date": "Apr 1, 2023",
+            "amount": "-$11.80",
+        },
+        {
+            "description": "Salary Deposit",
+            "date": "Apr 1, 2023",
+            "amount": "+$3,500.00",
+        },
+    ]
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {"user": user, "request": request, "transactions": recent_transactions}
+    print(f"{context}")
+    return templates.TemplateResponse("bank.html", context)
 
 
 @app.get("/nginx-auth")
