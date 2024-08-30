@@ -8,6 +8,7 @@ from fastapi.responses import RedirectResponse
 import uvicorn
 import os
 from dotenv import load_dotenv
+import asyncio
 
 from settings import settings
 from model import User
@@ -159,15 +160,15 @@ async def login_post(request: Request):
     return templates.TemplateResponse("login.html", form.__dict__)
 
 
+def dev_server():
+    uvicorn.run("app:app", port=PORT, host=HOST, log_level="debug", reload=True)
+
+
 def start_server():
-    uvicorn.run(
-        "app:app",
-        port=PORT,
-        host=HOST,
-        log_level="debug",
-        reload=True,
-    )
+    uvicorn.run("app:app", port=PORT, host=HOST, log_level="debug", workers=4)
 
 
 if __name__ == "__main__":
-    start_server()
+    # create and access a new asyncio event loop
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(start_server())
