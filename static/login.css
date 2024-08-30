@@ -23,3 +23,12 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.footer .container-fluid{
+  background-color: var(--bs-indigo);
+}
+
+.footer p{
+  color: white;
+}
+
