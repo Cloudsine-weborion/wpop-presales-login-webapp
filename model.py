@@ -12,6 +12,7 @@ PASSWORD1 = os.getenv("PASSWORD1")
 class User(BaseModel):
     username: str
     hashed_password: str
+    balance: str
 
 
 class DataBase(BaseModel):
@@ -20,7 +21,9 @@ class DataBase(BaseModel):
 
 DB = DataBase(
     user=[
-        User(username=USERNAME1, hashed_password=crypto.hash(PASSWORD1)),
+        User(
+            username=USERNAME1, hashed_password=crypto.hash(PASSWORD1), balance="$12714"
+        )
         # add more users here
     ]
 )
