@@ -24,7 +24,7 @@ DB = DataBase(
         User(
             username=USERNAME1,
             hashed_password=crypto.hash(PASSWORD1),
-            balance="$10,293.05",
+            balance="10,293.05",
         )
         # add more users here
     ]
