@@ -17,6 +17,7 @@ from auth import (
     get_current_user_from_token,
     get_current_user_from_cookie,
 )
+from utils import convert_float_to_str, convert_str_to_float
 
 
 class LoginForm:
@@ -41,6 +42,30 @@ class LoginForm:
         return False
 
 
+class TransferForm:
+    def __init__(self, request: Request):
+        self.request: Request = request
+        self.errors: List = []
+        self.account_number: Optional[str] = None
+        self.routing_number: Optional[str] = None
+        self.amount: Optional[str] = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        self.account_number = form.get("accountNumber")
+        self.routing_number = form.get("routingNumber")
+        self.amount = form.get("amount")
+
+    async def is_valid(self):
+        if not self.account_number:
+            self.errors.append("Amount is required")
+        if not self.routing_number:
+            self.errors.append("Routing number is required")
+        if not self.errors:
+            return True
+        return False
+
+
 app = FastAPI()
 
 
@@ -50,6 +75,26 @@ PORT = int(os.getenv("PORT"))
 
 
 account_balance = {"balance": "$1000"}
+
+recent_transactions = [
+    {"description": "Restaurant XYZ", "date": "May 15, 2023", "amount": "-$45.60"},
+    {"description": "Grocery Store", "date": "May 14, 2023", "amount": "-$82.35"},
+    {
+        "description": "Salary Deposit",
+        "date": "May 1, 2023",
+        "amount": "+$3,500.00",
+    },
+    {
+        "description": "Macdonald",
+        "date": "Apr 1, 2023",
+        "amount": "-$11.80",
+    },
+    {
+        "description": "Salary Deposit",
+        "date": "Apr 1, 2023",
+        "amount": "+$3,500.00",
+    },
+]
 
 app.mount("/auth/static", StaticFiles(directory="static"), name="static")
 
@@ -63,7 +108,7 @@ async def root():
 
 
 # --------------------------------------------------------------------------
-# Home Page
+# Home Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/cpanel", response_class=HTMLResponse)
 async def index(request: Request):
@@ -80,7 +125,7 @@ async def index(request: Request):
 
 
 # --------------------------------------------------------------------------
-# SQLI Page
+# SQLI Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/sqli", response_class=HTMLResponse)
 async def auth_sqli(request: Request):
@@ -96,36 +141,61 @@ async def auth_sqli(request: Request):
 
 
 # --------------------------------------------------------------------------
-# Bank Page
+# Bank Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/bank", response_class=HTMLResponse)
 async def auth_bank(request: Request):
-    recent_transactions = [
-        {"description": "Restaurant XYZ", "date": "May 15, 2023", "amount": "-$45.60"},
-        {"description": "Grocery Store", "date": "May 14, 2023", "amount": "-$82.35"},
-        {
-            "description": "Salary Deposit",
-            "date": "May 1, 2023",
-            "amount": "+$3,500.00",
-        },
-        {
-            "description": "Macdonald",
-            "date": "Apr 1, 2023",
-            "amount": "-$11.80",
-        },
-        {
-            "description": "Salary Deposit",
-            "date": "Apr 1, 2023",
-            "amount": "+$3,500.00",
-        },
-    ]
     try:
         user = get_current_user_from_cookie(request)
     except:
         user = None
     context = {"user": user, "request": request, "transactions": recent_transactions}
-    print(f"{context}")
     return templates.TemplateResponse("bank.html", context)
+
+
+# --------------------------------------------------------------------------
+# Bank Transfer Page - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/bank/transfer", response_class=HTMLResponse)
+async def auth_bank_transfer(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {"user": user, "request": request}
+    return templates.TemplateResponse("bank-transfer.html", context)
+
+
+# --------------------------------------------------------------------------
+# Bank Transfer Page - POST
+# --------------------------------------------------------------------------
+@app.post("/auth/bank/transfer")
+async def auth_bank_transfer_post(request: Request):
+    form = TransferForm(request)
+    await form.load_data()
+
+    if await form.is_valid():
+        try:
+            user = get_current_user_from_cookie(request)
+            current_balance = convert_str_to_float(user.balance)
+
+            transfer_amt = convert_str_to_float(form.__dict__.get("amount"))
+            new_balance = current_balance - transfer_amt
+            user.balance = convert_float_to_str(new_balance)
+            form.__dict__.update(msg="Transfer Successful!")
+
+            context = {
+                "user": user,
+                "request": request,
+                "form": form.__dict__,
+                "transactions": recent_transactions,
+            }
+            return templates.TemplateResponse("bank.html", context)
+        except HTTPException:
+            form.__dict__.update(msg="")
+            form.__dict__.get("errors").append("Transfer Unsuccessful!")
+            return templates.TemplateResponse("bank-transfer.html", form.__dict__)
+    return templates.TemplateResponse("bank-transfer.html", form.__dict__)
 
 
 @app.get("/nginx-auth")
