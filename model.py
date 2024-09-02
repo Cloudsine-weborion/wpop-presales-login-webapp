@@ -22,7 +22,9 @@ class DataBase(BaseModel):
 DB = DataBase(
     user=[
         User(
-            username=USERNAME1, hashed_password=crypto.hash(PASSWORD1), balance="$12714"
+            username=USERNAME1,
+            hashed_password=crypto.hash(PASSWORD1),
+            balance="$10,293.05",
         )
         # add more users here
     ]
