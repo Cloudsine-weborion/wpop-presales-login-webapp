@@ -1,0 +1,121 @@
+<!doctype html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bank App Salesdemo</title>
+    <link rel="icon"
+        href="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn4.vectorstock.com%2Fi%2F1000x1000%2F16%2F48%2Fshield-icon-placed-on-transparent-background-vector-23041648.jpg&f=1&nofb=1&ipt=4987d90eeb0ba8ac2936f1b6e833e81fafd2c0c7fee2976395c854ba8b2da5a1&ipo=images"
+        type="image/x-icon" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/auth/static/bank-transfer.css">
+
+    <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+        </script>
+
+</head>
+
+<body>
+    <header>
+        <h1>MaynotBank</h1>
+    </header>
+    <!-- Bank Navbar-->
+    <nav class="navbar navbar-light navbar-expand-lg">
+        <div class="container-fluid">
+            <!-- <a class="navbar-brand mb-0 h1" href="#">MayNotBank</a> -->
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/bank">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Accounts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/auth/bank/transfer">Transfer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Payments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Support</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="form-signin w-100 m-auto">
+        <div class="container p-2">
+            <h2>Transfer Money</h2>
+            {% for error in errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
+            <form id="transferForm" action="/auth/bank/transfer" method="POST">
+                <label for="fromAccount">From Account:</label>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="fromAccount"
+                    required>
+                    <option value="savings">Savings Account (Balance: {{ user.balance }})</option>
+                </select>
+                <div id="fromBalance" class="balance"></div>
+
+                <label for="toAccount">To Account:</label>
+                <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="toAccount" required>
+                    <option value="savings">Savings Account</option>
+                    <option value="external">External Account</option>
+                </select>
+
+                <div id="externalAccountInfo" style="display: none;">
+                    <label for="accountNumber">Account Number:</label>
+                    <input class="form-control" type="text" id="accountNumber" name="accountNumber"
+                        value="{{accountNumber}}" placeholder="Enter account number">
+                    <label for="routingNumber">Routing Number:</label>
+                    <input class="form-control" type="text" id="routingNumber" name="routingNumber"
+                        value="{{routingNumber}}" placeholder="Enter routing number">
+                </div>
+
+                <label for="amount">Amount:</label>
+                <input class="form-control" type="number" id="amount" name="amount" value="{{amount}}" min="1" step="1"
+                    placeholder="SGD" required>
+
+                <button class="btn btn-primary w-100 py-2 mb-4 mt-4" type="submit">Transfer</button>
+            </form>
+        </div>
+    </main>
+
+    <!--Footer-->
+    <section class="footer">
+        <div class="container-fluid">
+            <footer class="py-3 my-4 mb-0">
+                <p class="text-center ">&copy; 2024 MayNotBank. This app should not be re-distributed</p>
+            </footer>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script>
+        const toAccount = document.getElementById('toAccount');
+        toAccount.addEventListener('change', function () {
+            if (this.value === 'external') {
+                externalAccountInfo.style.display = 'block';
+            } else {
+                externalAccountInfo.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
