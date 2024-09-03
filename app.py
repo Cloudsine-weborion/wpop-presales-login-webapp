@@ -74,7 +74,7 @@ HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 
 
-account_balance = {"balance": "$1000"}
+account_balance = {"balance": "7800.88"}
 
 recent_transactions = [
     {"description": "Restaurant XYZ", "date": "May 15, 2023", "amount": "-$45.60"},
@@ -114,7 +114,7 @@ async def root():
 async def index(request: Request):
     try:
         user = get_current_user_from_cookie(request)
-        user.balance = "10,293.05"
+        account_balance["balance"] = "7800.88"
     except:
         user = None
     context = {
@@ -150,7 +150,12 @@ async def auth_bank(request: Request):
         user = get_current_user_from_cookie(request)
     except:
         user = None
-    context = {"user": user, "request": request, "transactions": recent_transactions}
+    context = {
+        "user": user,
+        "request": request,
+        "transactions": recent_transactions,
+        "balance": account_balance["balance"],
+    }
     return templates.TemplateResponse("bank.html", context)
 
 
@@ -163,7 +168,7 @@ async def auth_bank_transfer(request: Request):
         user = get_current_user_from_cookie(request)
     except:
         user = None
-    context = {"user": user, "request": request}
+    context = {"user": user, "request": request, "balance": account_balance["balance"]}
     return templates.TemplateResponse("bank-transfer.html", context)
 
 
@@ -178,11 +183,11 @@ async def auth_bank_transfer_post(request: Request):
     if await form.is_valid():
         try:
             user = get_current_user_from_cookie(request)
-            current_balance = convert_str_to_float(user.balance)
+            current_balance = convert_str_to_float(account_balance["balance"])
 
             transfer_amt = convert_str_to_float(form.__dict__.get("amount"))
             new_balance = current_balance - transfer_amt
-            user.balance = convert_float_to_str(new_balance)
+            account_balance["balance"] = convert_float_to_str(new_balance)
             form.__dict__.update(msg="Transfer Successful!")
 
             context = {
@@ -191,6 +196,7 @@ async def auth_bank_transfer_post(request: Request):
                 "form": form.__dict__,
                 "transactions": recent_transactions,
                 "popup_message": f"Transfer Successful! ${transfer_amt}",
+                "balance": account_balance["balance"],
             }
 
             return templates.TemplateResponse("bank.html", context)
