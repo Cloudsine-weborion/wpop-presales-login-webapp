@@ -119,6 +119,21 @@
             </div>
         </div>
 
+        <!-- Bootstrap Modal -->
+        <div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="transferModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="transferModalLabel">Transfer Status</h5>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+                        <!-- Message will be set by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!--Footer-->
         <section class="footer">
             <div class="container-fluid">
@@ -135,6 +150,17 @@
         const currentDateElement = document.getElementById('currentDate');
         const currentDate = new Date().toLocaleDateString();
         currentDateElement.textContent = currentDate;
+    </script>
+
+    <!-- JavaScript to show the modal if there's a popup message -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const popupMessage = '{{ popup_message }}'; // Safely include the message in JavaScript
+            if (popupMessage) {
+                document.getElementById('modalBody').textContent = popupMessage;
+                $('#transferModal').modal('show');
+            }
+        });
     </script>
 
     <!-- Bootstrap JS, Popper.js, and jQuery (necessary for Bootstrap's JavaScript plugins) -->
