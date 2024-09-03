@@ -114,6 +114,7 @@ async def root():
 async def index(request: Request):
     try:
         user = get_current_user_from_cookie(request)
+        user.balance = "10,293.05"
     except:
         user = None
     context = {
@@ -189,7 +190,9 @@ async def auth_bank_transfer_post(request: Request):
                 "request": request,
                 "form": form.__dict__,
                 "transactions": recent_transactions,
+                "popup_message": f"Transfer Successful! ${transfer_amt}",
             }
+
             return templates.TemplateResponse("bank.html", context)
         except HTTPException:
             form.__dict__.update(msg="")
