@@ -70,8 +70,8 @@
         <div class="container">
             <div class="account-summary">
                 <h3>Total Balance</h3>
-                <div class="account-balance {% if user.balance.startswith('-') %}negative-balance{% endif %}">
-                    ${{ user.balance }}
+                <div class="account-balance {% if balance.startswith('-') %}negative-balance{% endif %}">
+                    ${{ balance }}
                 </div>
                 <p>As of <span id="currentDate"></span></p>
             </div>
