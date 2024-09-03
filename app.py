@@ -114,7 +114,6 @@ async def root():
 async def index(request: Request):
     try:
         user = get_current_user_from_cookie(request)
-        account_balance["balance"] = "7800.88"
     except:
         user = None
     context = {
@@ -146,6 +145,7 @@ async def auth_sqli(request: Request):
 # --------------------------------------------------------------------------
 @app.get("/auth/bank", response_class=HTMLResponse)
 async def auth_bank(request: Request):
+    account_balance["balance"] = "7800.88"
     # try:
     #     user = get_current_user_from_cookie(request)
     # except:
