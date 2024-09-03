@@ -182,7 +182,7 @@ async def auth_bank_transfer_post(request: Request):
 
     if await form.is_valid():
         try:
-            user = get_current_user_from_cookie(request)
+            # user = get_current_user_from_cookie(request)
             current_balance = convert_str_to_float(account_balance["balance"])
 
             transfer_amt = convert_str_to_float(form.__dict__.get("amount"))
@@ -191,7 +191,7 @@ async def auth_bank_transfer_post(request: Request):
             form.__dict__.update(msg="Transfer Successful!")
 
             context = {
-                "user": user,
+                # "user": user,
                 "request": request,
                 "form": form.__dict__,
                 "transactions": recent_transactions,
