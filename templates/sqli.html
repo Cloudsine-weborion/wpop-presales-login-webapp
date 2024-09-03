@@ -28,7 +28,7 @@
 </head>
 
 <body>
-
+  {% if user %}
   <!--Navbar-->
   <nav class="navbar navbar-light navbar-expand-lg">
     <div class="container-fluid">
@@ -107,5 +107,14 @@
       </footer>
     </div>
   </section>
+
+  {% else %}
+  <div class="container p-2 text-center">
+    <p class="text-center">
+      You are currently not authenticated, please authenticate
+      <a href="/auth/login" class="btn">Login</a>
+    </p>
+  </div>
+  {% endif %}
 
 </body>
