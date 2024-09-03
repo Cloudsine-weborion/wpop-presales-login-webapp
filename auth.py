@@ -52,8 +52,6 @@ class OAuth2PasswordBearerWithCookie(OAuth2):
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(tokenUrl="token")
 
-import pdb
-
 
 def create_access_token(data: Dict) -> str:
     to_encode = data.copy()
