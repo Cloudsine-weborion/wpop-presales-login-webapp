@@ -141,6 +141,22 @@ async def auth_sqli(request: Request):
 
 
 # --------------------------------------------------------------------------
+# CSRF Page - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/csrf", response_class=HTMLResponse)
+async def auth_sqli(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {
+        "user": user,
+        "request": request,
+    }
+    return templates.TemplateResponse("csrf.html", context)
+
+
+# --------------------------------------------------------------------------
 # Bank Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/bank", response_class=HTMLResponse)
