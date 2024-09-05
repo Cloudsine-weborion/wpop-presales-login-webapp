@@ -144,7 +144,7 @@ async def auth_sqli(request: Request):
 # CSRF Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/csrf", response_class=HTMLResponse)
-async def auth_sqli(request: Request):
+async def auth_csrf(request: Request):
     try:
         user = get_current_user_from_cookie(request)
     except:
@@ -154,6 +154,22 @@ async def auth_sqli(request: Request):
         "request": request,
     }
     return templates.TemplateResponse("csrf.html", context)
+
+
+# --------------------------------------------------------------------------
+# RCE Page - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/rce", response_class=HTMLResponse)
+async def auth_rce(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {
+        "user": user,
+        "request": request,
+    }
+    return templates.TemplateResponse("rce.html", context)
 
 
 # --------------------------------------------------------------------------
