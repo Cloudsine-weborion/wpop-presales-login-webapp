@@ -127,8 +127,8 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="transferModalLabel">Transfer Status</h5>
                     </div>
-                    <div class="modal-body" id="modalBody">
-                        <!-- Message will be set by JavaScript -->
+                    <div class="modal-body">
+                        Amount transferred: $<span id="transferAmount"></span>
                     </div>
                 </div>
             </div>
@@ -154,6 +154,20 @@
 
     <!-- JavaScript to show the modal if there's a popup message -->
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Parse the query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const transferAmount = urlParams.get('transfer_amount');
+            
+            // Show the modal if the transfer_amount parameter is present
+            if (transferAmount) {
+                const modal = new bootstrap.Modal(document.getElementById('transferModal'));
+                document.getElementById('transferAmount').textContent = transferAmount;
+                modal.show();
+            }
+        });
+    </script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', () => {
             const popupMessage = '{{ popup_message }}'; // Safely include the message in JavaScript
             if (popupMessage) {
@@ -161,7 +175,7 @@
                 $('#transferModal').modal('show');
             }
         });
-    </script>
+    </script> -->
 
     <!-- Bootstrap JS, Popper.js, and jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
