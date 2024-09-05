@@ -159,7 +159,7 @@ async def auth_csrf(request: Request):
 # --------------------------------------------------------------------------
 # RCE Page - GET
 # --------------------------------------------------------------------------
-@app.get("/auth/rce", response_class=HTMLResponse)
+@app.get("/auth/webshell", response_class=HTMLResponse)
 async def auth_rce(request: Request):
     try:
         user = get_current_user_from_cookie(request)
@@ -169,7 +169,7 @@ async def auth_rce(request: Request):
         "user": user,
         "request": request,
     }
-    return templates.TemplateResponse("rce.html", context)
+    return templates.TemplateResponse("webshell.html", context)
 
 
 # --------------------------------------------------------------------------
