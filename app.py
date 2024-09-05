@@ -75,9 +75,9 @@ HOST = os.getenv("HOST")
 PORT = int(os.getenv("PORT"))
 
 
-account_balance = {"balance": "7800.88"}
+original_balance = "33,500.88"
 
-recent_transactions = [
+original_transaction = [
     {"description": "Restaurant XYZ", "date": "May 15, 2024", "amount": "-$45.60"},
     {"description": "Grocery Store", "date": "May 14, 2024", "amount": "-$82.35"},
     {
@@ -96,6 +96,10 @@ recent_transactions = [
         "amount": "+$3,500.00",
     },
 ]
+
+# Global state
+account_balance = {"balance": original_balance}
+recent_transactions = original_transaction.copy()
 
 app.mount("/auth/static", StaticFiles(directory="static"), name="static")
 
@@ -208,7 +212,7 @@ async def auth_bank_transfer(request: Request):
 # --------------------------------------------------------------------------
 # Bank Transfer Page - POST
 # --------------------------------------------------------------------------
-@app.post("/auth/bank/transfer")
+@app.post("/auth/bank/transfer", response_class=HTMLResponse)
 async def auth_bank_transfer_post(request: Request):
     form = TransferForm(request)
     await form.load_data()
@@ -243,6 +247,19 @@ async def auth_bank_transfer_post(request: Request):
             form.__dict__.get("errors").append("Transfer Unsuccessful!")
             return templates.TemplateResponse("bank-transfer.html", form.__dict__)
     return templates.TemplateResponse("bank-transfer.html", form.__dict__)
+
+
+# --------------------------------------------------------------------------
+# Bank Page Reset - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/bank/reset", response_class=HTMLResponse)
+async def auth_bank_reset():
+    global account_balance, recent_transactions
+
+    # Reset to initial values
+    account_balance["balance"] = original_balance
+    recent_transactions[:] = original_transaction.copy()  # Reset list to initial
+    return RedirectResponse("/auth/bank", status.HTTP_302_FOUND)
 
 
 @app.get("/nginx-auth")
