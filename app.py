@@ -9,6 +9,7 @@ import uvicorn
 import os
 from dotenv import load_dotenv
 import asyncio
+from datetime import datetime
 
 from settings import settings
 from auth import (
@@ -77,21 +78,21 @@ PORT = int(os.getenv("PORT"))
 account_balance = {"balance": "7800.88"}
 
 recent_transactions = [
-    {"description": "Restaurant XYZ", "date": "May 15, 2023", "amount": "-$45.60"},
-    {"description": "Grocery Store", "date": "May 14, 2023", "amount": "-$82.35"},
+    {"description": "Restaurant XYZ", "date": "May 15, 2024", "amount": "-$45.60"},
+    {"description": "Grocery Store", "date": "May 14, 2024", "amount": "-$82.35"},
     {
         "description": "Salary Deposit",
-        "date": "May 1, 2023",
+        "date": "May 1, 2024",
         "amount": "+$3,500.00",
     },
     {
         "description": "Macdonald",
-        "date": "Apr 1, 2023",
+        "date": "Apr 1, 2024",
         "amount": "-$11.80",
     },
     {
         "description": "Salary Deposit",
-        "date": "Apr 1, 2023",
+        "date": "Apr 1, 2024",
         "amount": "+$3,500.00",
     },
 ]
@@ -160,7 +161,7 @@ async def auth_csrf(request: Request):
 # RCE Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/webshell", response_class=HTMLResponse)
-async def auth_rce(request: Request):
+async def auth_webshell(request: Request):
     try:
         user = get_current_user_from_cookie(request)
     except:
@@ -177,7 +178,7 @@ async def auth_rce(request: Request):
 # --------------------------------------------------------------------------
 @app.get("/auth/bank", response_class=HTMLResponse)
 async def auth_bank(request: Request):
-    account_balance["balance"] = "7800.88"
+    # account_balance["balance"] = "7800.88"
     # try:
     #     user = get_current_user_from_cookie(request)
     # except:
@@ -220,18 +221,23 @@ async def auth_bank_transfer_post(request: Request):
             transfer_amt = convert_str_to_float(form.__dict__.get("amount"))
             new_balance = current_balance - transfer_amt
             account_balance["balance"] = convert_float_to_str(new_balance)
-            form.__dict__.update(msg="Transfer Successful!")
+            account_number = form.__dict__.get("account_number")
 
-            context = {
-                # "user": user,
-                "request": request,
-                "form": form.__dict__,
-                "transactions": recent_transactions,
-                "popup_message": f"Transfer Successful! ${transfer_amt}",
-                "balance": account_balance["balance"],
+            today = datetime.today()
+            formatted_date = today.strftime("%B %d, %Y")
+
+            new_transaction = {
+                "description": f"Fund transfer to Account Number {account_number}",
+                "date": formatted_date,
+                "amount": f"-${transfer_amt:.2f}",
             }
 
-            return templates.TemplateResponse("bank.html", context)
+            recent_transactions.insert(0, new_transaction)
+
+            # Redirect response upon submission and include the transfer amount in the url
+            return RedirectResponse(
+                f"/auth/bank?transfer_amount={transfer_amt:.2f}", status.HTTP_302_FOUND
+            )
         except HTTPException:
             form.__dict__.update(msg="")
             form.__dict__.get("errors").append("Transfer Unsuccessful!")
