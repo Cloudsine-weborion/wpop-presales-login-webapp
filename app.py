@@ -162,7 +162,7 @@ async def auth_csrf(request: Request):
 
 
 # --------------------------------------------------------------------------
-# RCE Page - GET
+# Webshell Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/webshell", response_class=HTMLResponse)
 async def auth_webshell(request: Request):
@@ -175,6 +175,22 @@ async def auth_webshell(request: Request):
         "request": request,
     }
     return templates.TemplateResponse("webshell.html", context)
+
+
+# --------------------------------------------------------------------------
+# XSS Page - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/xss", response_class=HTMLResponse)
+async def auth_xss(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+    context = {
+        "user": user,
+        "request": request,
+    }
+    return templates.TemplateResponse("xss.html", context)
 
 
 # --------------------------------------------------------------------------
