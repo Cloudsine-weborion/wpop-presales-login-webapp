@@ -71,17 +71,14 @@
 
                 <label for="toAccount">To Account:</label>
                 <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="toAccount" required>
-                    <option value="savings">Savings Account</option>
+                    <!-- <option value="savings">Savings Account</option> -->
                     <option value="external">External Account</option>
                 </select>
 
-                <div id="externalAccountInfo" style="display: none;">
+                <div id="externalAccountInfo" style="display: block;">
                     <label for="accountNumber">Account Number:</label>
                     <input class="form-control" type="text" id="accountNumber" name="accountNumber"
                         value="{{accountNumber}}" placeholder="Enter account number" required>
-                    <label for="routingNumber">Routing Number:</label>
-                    <input class="form-control" type="text" id="routingNumber" name="routingNumber"
-                        value="{{routingNumber}}" placeholder="Enter routing number"required>
                 </div>
 
                 <label for="amount">Amount:</label>
@@ -103,7 +100,7 @@
     </section>
 
     <!-- JavaScript -->
-    <script>
+    <!-- <script>
         const toAccount = document.getElementById('toAccount');
         toAccount.addEventListener('change', function () {
             if (this.value === 'external') {
@@ -112,7 +109,7 @@
                 externalAccountInfo.style.display = 'none';
             }
         });
-    </script>
+    </script> -->
 
     <!-- Bootstrap JS, Popper.js, and jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
