@@ -81,8 +81,7 @@ def decode_token(token: str) -> User:
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
     )
-    # pdb.set_trace()
-    # highlight-start
+
     # token = token.removeprefix("Bearer").strip()
     token = token.replace("Bearer", "").strip()
     # highlight-end
