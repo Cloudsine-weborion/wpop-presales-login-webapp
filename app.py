@@ -48,20 +48,20 @@ class TransferForm:
         self.request: Request = request
         self.errors: List = []
         self.account_number: Optional[str] = None
-        self.routing_number: Optional[str] = None
+        # self.routing_number: Optional[str] = None
         self.amount: Optional[str] = None
 
     async def load_data(self):
         form = await self.request.form()
         self.account_number = form.get("accountNumber")
-        self.routing_number = form.get("routingNumber")
+        # self.routing_number = form.get("routingNumber")
         self.amount = form.get("amount")
 
     async def is_valid(self):
         if not self.account_number:
             self.errors.append("Amount is required")
-        if not self.routing_number:
-            self.errors.append("Routing number is required")
+        # if not self.routing_number:
+        #     self.errors.append("Routing number is required")
         if not self.errors:
             return True
         return False
@@ -249,15 +249,17 @@ async def auth_bank_transfer_post(request: Request):
             new_transaction = {
                 "description": f"Fund transfer to Account Number {account_number}",
                 "date": formatted_date,
-                "amount": f"-${transfer_amt:.2f}",
+                "amount": f"-${transfer_amt:,.2f}",
             }
 
             recent_transactions.insert(0, new_transaction)
 
             # Redirect response upon submission and include the transfer amount in the url
-            return RedirectResponse(
-                f"/auth/bank?transfer_amount={transfer_amt:.2f}", status.HTTP_302_FOUND
-            )
+            # return RedirectResponse(
+            #     f"/auth/bank?transfer_amount={transfer_amt:.2f}", status.HTTP_302_FOUND
+            # )
+            return RedirectResponse(f"/auth/bank", status.HTTP_302_FOUND)
+
         except HTTPException:
             form.__dict__.update(msg="")
             form.__dict__.get("errors").append("Transfer Unsuccessful!")
