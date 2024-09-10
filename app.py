@@ -377,4 +377,4 @@ def start_server():
 if __name__ == "__main__":
     # create and access a new asyncio event loop
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(dev_server())
+    loop.run_until_complete(start_server())
