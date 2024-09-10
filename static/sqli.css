@@ -1,47 +1,50 @@
-.navbar{
+.navbar {
     background-color: var(--bs-indigo);
 }
 
 
-.nav-link{
+.nav-link {
     color: white;
 }
 
 
-h1{
-    font-size:1.75em;
+h1 {
+    font-size: 1.75em;
 }
 
-h2{
+h2 {
     font-size: 1.5em;
 }
 
-h3{
+h3 {
     font-size: 1.2em;
 }
 
-p{
-    font-size:1em;
+p {
+    font-size: 1em;
 }
 
-.footer .container-fluid{
+.footer .container-fluid {
     background-color: var(--bs-indigo);
 }
 
-.footer p{
+.footer p {
     color: white;
 }
 
 .code-container {
     position: relative;
-    border: 1px solid #ddd; /* Add border if you want */
+    border: 1px solid #ddd;
+    /* Add border if you want */
     padding: 10px;
     border-radius: 5px;
-    background-color: #f5f5f5; /* Background color for the code block */
+    background-color: #f5f5f5;
+    /* Background color for the code block */
 }
 
 pre {
-    margin: 0; /* Remove default margin from pre */
+    margin: 0;
+    /* Remove default margin from pre */
 }
 
 .tooltip-message {

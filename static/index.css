@@ -1,24 +1,24 @@
-.index_container{
+.index_container {
     display: flex;
     flex-direction: column;
-    gap:10px;
-    padding:10px;
+    gap: 10px;
+    padding: 10px;
 
 }
 
-.navbar{
+.navbar {
     background-color: var(--bs-indigo);
 }
 
-.nav-link{
+.nav-link {
     color: white;
 }
 
-.footer .container-fluid{
+.footer .container-fluid {
     background-color: var(--bs-indigo);
 }
 
-.footer p{
+.footer p {
     color: white;
 }
 
@@ -44,4 +44,3 @@
     position: relative;
     display: inline-block;
 }
-

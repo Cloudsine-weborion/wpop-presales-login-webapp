@@ -102,7 +102,9 @@
 
             <p>5. Upon success, you should see an alert message "hacked" after navigating to the ABOUT page</p>
             <h2>Mitigation</h2>
-            <p>CRS blocks XSS exploits with its rules from <a href="https://github.com/coreruleset/coreruleset/blob/main/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf">941XXX</a></p>
+            <p>CRS blocks XSS exploits with its rules from <a
+                    href="https://github.com/coreruleset/coreruleset/blob/main/rules/REQUEST-941-APPLICATION-ATTACK-XSS.conf">941XXX</a>
+            </p>
 
 
 
@@ -126,23 +128,23 @@
     <script>
         // Initialize ClipboardJS
         var clipboard = new ClipboardJS('#copy-btn');
-        clipboard.on('success', function(e) {
-                // Get the tooltip of the clicked button
-                var tooltip = e.trigger.querySelector('.tooltip-message');
-                
-                // Show the tooltip
-                tooltip.style.display = 'inline-block';
-                tooltip.classList.add('show');
+        clipboard.on('success', function (e) {
+            // Get the tooltip of the clicked button
+            var tooltip = e.trigger.querySelector('.tooltip-message');
 
-                // Hide the tooltip after 1 second
-                setTimeout(function() {
-                    tooltip.classList.remove('show');
-                    tooltip.style.display = 'none';
-                }, 1000);
-            });
+            // Show the tooltip
+            tooltip.style.display = 'inline-block';
+            tooltip.classList.add('show');
 
-            clipboard.on('error', function(e) {
-                console.error('Failed to copy text: ', e);
+            // Hide the tooltip after 1 second
+            setTimeout(function () {
+                tooltip.classList.remove('show');
+                tooltip.style.display = 'none';
+            }, 1000);
+        });
+
+        clipboard.on('error', function (e) {
+            console.error('Failed to copy text: ', e);
         });
     </script>
 

@@ -157,24 +157,24 @@
   <script>
     // Initialize ClipboardJS
     var clipboard = new ClipboardJS('#copy-btn');
-    clipboard.on('success', function(e) {
-                // Get the tooltip of the clicked button
-                var tooltip = e.trigger.querySelector('.tooltip-message');
-                
-                // Show the tooltip
-                tooltip.style.display = 'inline-block';
-                tooltip.classList.add('show');
+    clipboard.on('success', function (e) {
+      // Get the tooltip of the clicked button
+      var tooltip = e.trigger.querySelector('.tooltip-message');
 
-                // Hide the tooltip after 1 second
-                setTimeout(function() {
-                    tooltip.classList.remove('show');
-                    tooltip.style.display = 'none';
-                }, 1000);
-            });
+      // Show the tooltip
+      tooltip.style.display = 'inline-block';
+      tooltip.classList.add('show');
 
-            clipboard.on('error', function(e) {
-                console.error('Failed to copy text: ', e);
-            });
+      // Hide the tooltip after 1 second
+      setTimeout(function () {
+        tooltip.classList.remove('show');
+        tooltip.style.display = 'none';
+      }, 1000);
+    });
+
+    clipboard.on('error', function (e) {
+      console.error('Failed to copy text: ', e);
+    });
   </script>
 </body>
 
