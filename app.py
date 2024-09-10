@@ -274,9 +274,29 @@ async def auth_bank_transfer_post(request: Request):
 async def auth_bank_reset():
     global account_balance, recent_transactions
 
-    # Reset to initial values
-    account_balance["balance"] = original_balance
-    recent_transactions[:] = original_transaction.copy()  # Reset list to initial
+    original_balance = "33,500.88"
+
+    account_balance = {"balance": original_balance}
+
+    recent_transactions = [
+        {"description": "Restaurant XYZ", "date": "May 15, 2024", "amount": "-$45.60"},
+        {"description": "Grocery Store", "date": "May 14, 2024", "amount": "-$82.35"},
+        {
+            "description": "Salary Deposit",
+            "date": "May 1, 2024",
+            "amount": "+$3,500.00",
+        },
+        {
+            "description": "Macdonald",
+            "date": "Apr 1, 2024",
+            "amount": "-$11.80",
+        },
+        {
+            "description": "Salary Deposit",
+            "date": "Apr 1, 2024",
+            "amount": "+$3,500.00",
+        },
+    ]
     return RedirectResponse("/auth/bank", status.HTTP_302_FOUND)
 
 
@@ -351,10 +371,10 @@ def dev_server():
 
 
 def start_server():
-    uvicorn.run("app:app", port=PORT, host=HOST, log_level="debug", workers=4)
+    uvicorn.run("app:app", port=PORT, host=HOST, log_level="debug", workers=1)
 
 
 if __name__ == "__main__":
     # create and access a new asyncio event loop
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(start_server())
+    loop.run_until_complete(dev_server())
