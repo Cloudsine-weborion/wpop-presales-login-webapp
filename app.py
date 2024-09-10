@@ -130,6 +130,17 @@ async def index(request: Request):
 
 
 # --------------------------------------------------------------------------
+# Modal Pop up - GET
+# --------------------------------------------------------------------------
+@app.get("/auth/modal", response_class=HTMLResponse)
+async def auth_modal(request: Request):
+    context = {
+        "request": request,
+    }
+    return templates.TemplateResponse("modal.html", context)
+
+
+# --------------------------------------------------------------------------
 # SQLI Page - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/sqli", response_class=HTMLResponse)
@@ -271,33 +282,50 @@ async def auth_bank_transfer_post(request: Request):
 # Bank Page Reset - GET
 # --------------------------------------------------------------------------
 @app.get("/auth/bank/reset", response_class=HTMLResponse)
-async def auth_bank_reset():
+async def auth_bank_reset(request: Request):
+    try:
+        user = get_current_user_from_cookie(request)
+    except:
+        user = None
+
     global account_balance, recent_transactions
 
     original_balance = "33,500.88"
 
-    account_balance = {"balance": original_balance}
+    if user:
 
-    recent_transactions = [
-        {"description": "Restaurant XYZ", "date": "May 15, 2024", "amount": "-$45.60"},
-        {"description": "Grocery Store", "date": "May 14, 2024", "amount": "-$82.35"},
-        {
-            "description": "Salary Deposit",
-            "date": "May 1, 2024",
-            "amount": "+$3,500.00",
-        },
-        {
-            "description": "Macdonald",
-            "date": "Apr 1, 2024",
-            "amount": "-$11.80",
-        },
-        {
-            "description": "Salary Deposit",
-            "date": "Apr 1, 2024",
-            "amount": "+$3,500.00",
-        },
-    ]
-    return RedirectResponse("/auth/bank", status.HTTP_302_FOUND)
+        account_balance = {"balance": original_balance}
+
+        recent_transactions = [
+            {
+                "description": "Restaurant XYZ",
+                "date": "May 15, 2024",
+                "amount": "-$45.60",
+            },
+            {
+                "description": "Grocery Store",
+                "date": "May 14, 2024",
+                "amount": "-$82.35",
+            },
+            {
+                "description": "Salary Deposit",
+                "date": "May 1, 2024",
+                "amount": "+$3,500.00",
+            },
+            {
+                "description": "Macdonald",
+                "date": "Apr 1, 2024",
+                "amount": "-$11.80",
+            },
+            {
+                "description": "Salary Deposit",
+                "date": "Apr 1, 2024",
+                "amount": "+$3,500.00",
+            },
+        ]
+        return RedirectResponse("/auth/cpanel", status.HTTP_302_FOUND)
+    else:
+        return RedirectResponse("/auth/login", status.HTTP_302_FOUND)
 
 
 @app.get("/nginx-auth")
