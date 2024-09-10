@@ -76,6 +76,7 @@
                 data-clipboard-text="/rest/products/search?q=qwert%27%29%29%20UNION%20SELECT%20id%2C%20email%2C%20password%2C%20%274%27%2C%20%275%27%2C%20%276%27%2C%20%277%27%2C%20%278%27%2C%20%279%27%20FROM%20Users--">
                 <!-- Clipboard icon -->
                 <i class="fa fa-clipboard"></i>
+                <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
               </button>
             </td>
             <td><a style="text-decoration: none;" href="/">Juice Shop</a></td>
@@ -91,6 +92,7 @@
                 data-clipboard-text="https://54.255.164.107/attack/csrf/csrf.html">
                 <!-- Clipboard icon -->
                 <i class="fa fa-clipboard"></i>
+                <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
               </button>
             </td>
             <td><a style="text-decoration: none;" href="/auth/bank">Bank App</a></td>
@@ -107,6 +109,7 @@
                 data-clipboard-text="&lt;&lt;script&gt;Foo&lt;/script&gt;iframe src=&#x27;javascript:alert(&quot;hacked&quot;&#x27;)&gt;">
                 <!-- Clipboard icon -->
                 <i class="fa fa-clipboard"></i>
+                <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
               </button>
             </td>
             <td><a style="text-decoration: none;" href="/">Juice Shop</a></td>
@@ -121,6 +124,7 @@
               <button id="copy-btn" class="btn copy-button" data-clipboard-text="cat /etc/passwd">
                 <!-- Clipboard icon -->
                 <i class="fa fa-clipboard"></i>
+                <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
               </button>
             </td>
             <td><a style="text-decoration: none;" href="/webshell">Web Shell</a></td>
@@ -153,6 +157,24 @@
   <script>
     // Initialize ClipboardJS
     var clipboard = new ClipboardJS('#copy-btn');
+    clipboard.on('success', function(e) {
+                // Get the tooltip of the clicked button
+                var tooltip = e.trigger.querySelector('.tooltip-message');
+                
+                // Show the tooltip
+                tooltip.style.display = 'inline-block';
+                tooltip.classList.add('show');
+
+                // Hide the tooltip after 1 second
+                setTimeout(function() {
+                    tooltip.classList.remove('show');
+                    tooltip.style.display = 'none';
+                }, 1000);
+            });
+
+            clipboard.on('error', function(e) {
+                console.error('Failed to copy text: ', e);
+            });
   </script>
 </body>
 

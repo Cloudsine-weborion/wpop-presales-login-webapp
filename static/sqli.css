@@ -43,3 +43,26 @@ p{
 pre {
     margin: 0; /* Remove default margin from pre */
 }
+
+.tooltip-message {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    display: inline-block;
+    z-index: 1000;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.tooltip-message.show {
+    opacity: 1;
+}
+
+.copy-btn {
+    position: relative;
+    display: inline-block;
+}
