@@ -80,14 +80,23 @@
 
             <p>Reference #1 <a href="https://owasp.org/www-community/attacks/csrf">OWASP CRS</a></p>
 
-            <h2>Crafting the CSRF Attack</h2>
-            <p>1. A form that executes an action on the web application is being hosted on the attacker's server </p>
-            <p>2. The request will perform a fund transfer on the vulnerable bank application</p>
-            <p>3. It gets executed, when the end user is logged into the bank application and click on the phishing
-                link <a href="https://54.255.164.107/attack/csrf/csrf.html">FREE INVESTMENT MASTERCLASS</a></p>
-            <p>4. The attack is complete when the fund is successfully transferred</p>
+            <h2>Banking Application Senario</h2>
+            <p>1. It is fictitious banking application that is vulnerable</p>
+            <p>2. Web application attacks may not be directly executed by attackers, but it could also potentially be unintentionally triggered by the users as well </p>
+            <p>3. For example, users may click on phishing links, e.g. <a href="https://54.255.164.107/attack/csrf/csrf.html">"FREE INVESTMENT MASTERCLASS"</a></p></p>
+            
+            <h2>Exploit</h2>
 
-            <h2>Migitation</h2>
+            <p>1. With the WebOrion Protector WAF Engine in “ON” mode and the Custom CSRF rule disabled </p>
+            <p>2. Click on the phishing link to trigger an unauthorized transfer of funds. </p>
+            <p>3. The attack will be successfully triggered, and able to observe that the funds have been deducted </p>
+            <p>4. CRS does not safeguard against all types of attacks and WebOrion Protector allows the creation of custom rules for such cases </p>
+            <p>5. Do a reset on the bank balance and recent transaction</p>
+            <p>6. Enable the Custom CSRF rules and repeat </p>
+            <p>7. Click on the phishing link again and now it will be fully blocked with error page </p>
+            <p>8. Show that the transaction did not go through on the bank dashboard </p>
+
+            <h2>Mitigation</h2>
             <p>Reference #1 <a
                     href="https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html#identifying-source-origin-via-originreferer-header">Identifying
                     source origin</a></p>

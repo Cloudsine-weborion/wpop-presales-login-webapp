@@ -76,17 +76,14 @@
                 Attackers exploit vulnerabilities in software or services, such as web applications, APIs, or network
                 services.</p>
             <p>Reference #1 <a href="https://attack.mitre.org/techniques/T1505/003/">Mitre</a></p>
-
-            <h2>Crafting the exploit</h2>
-            <p>1. To simulate this exploit, we can use PHP to run the shells that provides a user interface</p>
-            <p>2. There are many open source web shells available <a
-                    href="https://github.com/JohnTroony/php-webshells/tree/master/Collection">here</a></p>
-            <p>3. Based on the CRS ruleset for remote code execution, it is able to detect the exploit by using a set of
-                regex such as this: <a
-                    href="https://github.com/coreruleset/coreruleset/blob/main/regex-assembly/932200.ra">here</a></p>
-            <p>4. You can access the <a href="/webshell">web shell</a> and perform a simple command line exection to
-                view the /etc/passwd file of the system that provides the access credential of the server</p>
-
+            <h2>Web Shell Scenario</h2>
+            <p>1. Upon discovering a vulnerability, an attacker may inject and install a malicious script known as a web shell.</p> 
+            <p>2. The web shell serves as a backdoor that allows the attacker to establish persistent access to the system, perform system command remotely, surf the server and extract sensitive information</p>    
+            <p>3. For instance, if the server is deployed on AWS, there was a vulnerability that allows users to retrieve the IAM credentials via the command line.</p>
+            
+            <h2>Exploit</h2>
+            <p>1. With the WebOrion Protector WAF Engine in “DETECTION ONLY” mode </p>
+            <p>2. Within the shell, navigate to /etc/passwd or execute the command cat /etc/passwd in the command line</p>
             <div class="pt-4">
                 <button id="copy-btn" class="btn" data-clipboard-target="#code">
                     <i class="fa fa-clipboard"></i> <!-- Clipboard icon -->
@@ -99,8 +96,13 @@
 </code>
             </pre>
 
-            <h2>Mitigation</h2>
+            <p>3. Show that the attack went through, it will display the password information of the server, this means that attack will be able to use this credential to perform further exploits </p>
+            <p>4. Switch the WebOrion Protector WAF Engine to “ON” mode </p>
+            <p>5. Repeat the attack again </p>
+            <p>6. Show that the attack is fully blocked </p>
 
+            <h2>Dashboard / Events</h2>
+            <p>1. Open the incidents page to briefly explain what is displayed, such as the type of request, attack and rules triggered. </p>
 
         </div>
 

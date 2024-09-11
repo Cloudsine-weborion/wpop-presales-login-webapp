@@ -69,38 +69,30 @@
     <p>SQL injection is a web application vulnerability as part of the OWASP Top Ten 2021. It is being exploited
       through
       SQL commands to search and extract sensitive information </p>
-    <h3>Juice Shop Scenario</h3>
-    <p>Exploiting this vulnerability on juice-shop to retrieve the user’s login email and password: </p>
-
-    <p>1. Discovered that there is a /search endpoint that allows users to retrieve product information</p>
-    <p>2. This discovery proves that there is an endpoint that allows access to the database. Inspect the network
-      traffic and you can find out that the endpoint is /rest/products/search </p>
-    <p>3. Since this endpoint fetches the product information from the PRODUCTS table. We can craft a UNION select
-      payload to query from the USERS table</p>
-    <p>
-      4. UNION select works in a way where both table columns need to match. Therefore, we need to first discover how
-      many columns are there in the PRODUCTS table
-    </p>
+    <h2>Juice Shop Scenario</h2>
+    <p>1. Juice Shop is a vulnerable application designed to showcase the OWASP Top Ten exploits. It simulates an online
+      shopping website, featuring common functionalities such as user account creation, product search, and credit card
+      transactions, etc.</p>
+    <p>2. The application includes a search functionality, it also provides an API endpoint that connects to the
+      database.</p>
+    <p>3. (Optional) Demonstrate that this API endpoint is vulnerable to SQL injection by doing a simple SQL query with
+      the UNION select </p>
     <div class="pt-4">
-      <button id="copy-btn" class="btn" data-clipboard-target="#sqli-code">
+      <button id="copy-btn" class="btn copy-button" data-clipboard-target="#sqli-code-2">
         <!-- Clipboard icon -->
         <i class="fa fa-clipboard"></i>
         <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
       </button>
     </div>
     <pre>
-<code id="sqli-code" class="language-bash">/rest/products/search?q=test%27%29%29%20UNION%20SELECT%201%20FROM%20USERS-- 
-</code>
-    </pre>
+  <code id="sqli-code-2" class="language-markdown">
+/rest/products/search?q=test
+  </code>
+      </pre>
 
-    <p>
-      5. Do this repeatedly until we find out that the number of columns for the PRODUCTS table is 9
-    </p>
-
-    <p>
-      6. Therefore, now we can craft the sql injection payload targeting the USERS table email and password using UNION
-      select
-    </p>
+    <h2>Exploit</h2>
+    <p>1. With the WebOrion Protector WAF Engine in “DETECTION ONLY” mode</p>
+    <p>2. Show that with SQL injection, you can retrieve sensitive users’ information from the database</p>
     <div class="pt-4">
       <button id="copy-btn" class="btn copy-button" data-clipboard-target="#sqli-code-2">
         <!-- Clipboard icon -->
@@ -112,6 +104,31 @@
 <code id="sqli-code-2" class="language-markdown">/rest/products/search?q=qwert%27%29%29%20UNION%20SELECT%20id%2C%20email%2C%20password%2C%20%274%27%2C%20%275%27%2C%20%276%27%2C%20%277%27%2C%20%278%27%2C%20%279%27%20FROM%20Users--
 </code>
     </pre>
+
+    <p>3. You can insert the payload to the URL in this manner </p>
+    <div class="pt-4">
+      <button id="copy-btn" class="btn copy-button" data-clipboard-target="#sqli-code-2">
+        <!-- Clipboard icon -->
+        <i class="fa fa-clipboard"></i>
+        <span id="tooltip-message" class="tooltip-message" style="display: none;">Copied!</span>
+      </button>
+    </div>
+    <pre>
+<code id="sqli-code-2" class="language-markdown">https://salesdemo-waf.stowndc.com/rest/products/search?q=qwert%27%29%29%20UNION%20SELECT%20id%2C%20email%2C%20password%2C%20%274%27%2C%20%275%27%2C%20%276%27%2C%20%277%27%2C%20%278%27%2C%20%279%27%20FROM%20Users--
+</code>
+    </pre>
+  
+    <p>4. Switch the WebOrion Protector WAF Engine to “ON” mode </p>
+    <p>5. Repeat the SQL injection attack </p>
+    <p>6. Show that now it fully blocks the SQL injection attack</p>
+    <p>7. Briefly explain the block/error page </p>
+    <p>8. The WebOrion ID is to aid users to search for the incident and fine-tuning purposes</p>
+    <p>9. Demonstrate the search functionality using the WebOrion ID </p>
+
+    <h2>Dashboard / Events</h2>
+    <p>1. After successfully executing the attack, review the events log in WebOrion Protector to see how the attack was detected (note that it was not blocked due to being in Detection Only mode). </p>
+    <p>2. Open the incidents page to briefly explain what is displayed, such as the type of request, attack and rules triggered. </p>
+
 
     <h2>Mitigaiton</h2>
     <p>CRS blocks SQL injection exploits with rules starting from <a
